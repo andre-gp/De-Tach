@@ -1,0 +1,2 @@
+# De-Tach
+De-Tach is a toolkit that helps you decouple your game logic by using ScriptableObject-based variables, events, and utilities. Simplify communication between systems while keeping your Unity projects clean and modular.
