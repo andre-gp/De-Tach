@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace DeTach
 {
+    [Icon("Packages/com.gaton.de-tach/Icons/Variable_#COLOR#.png")]
     [CreateAssetMenu(fileName = "#CUSTOMNAME#Variable", menuName = "DeTach/#CUSTOMNAME#/#CUSTOMNAME#Variable")]
     public class #CUSTOMNAME#Variable : GenericVariable<#TYPE#, #CUSTOMNAME#Event> { }
 }

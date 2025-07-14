@@ -1,0 +1,17 @@
+{
+    "name": "extensions",
+    "rootNamespace": "",
+    "references": [
+        "GUID:f8dc4b33ec8b394489ed36bad5a8cc4f",
+        "GUID:166067685f4c01d4da8e4f24fde17190"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace DeTach
 {
-    [Icon("Packages/com.gaton.de-tach/Icons/Event.png")]
+    [Icon("Packages/com.gaton.de-tach/Icons/Event_White.png")]
     public class BaseEvent : ScriptableObject
     {
         public string eventName;
@@ -12,7 +12,7 @@ namespace DeTach
         /// <summary>
         /// Subscribe to this event when you don't care about the value raised.
         /// </summary>
-        protected event Action OnChangeBaseEvent;
+        public event Action OnChangeBaseEvent;
 
 #if UNITY_EDITOR
         [SerializeField] List<UnityEngine.Object> listeners;

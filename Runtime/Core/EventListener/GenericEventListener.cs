@@ -8,7 +8,7 @@ namespace DeTach
                                                                 where TVariable : GenericVariable<T, TEvent>
                                                                 where TUnityEvent : UnityEvent<T>
     {
-        public TEvent Event;
+        //public TEvent Event;
 
         public TVariable Variable;
 
@@ -16,19 +16,26 @@ namespace DeTach
 
         private void OnEnable()
         {
-            if (Event != null)
-                Event.Add(OnValueChanged);
-
             if (Variable != null)
             {
+                if(Variable.Event != null)
+                {
+                    Variable.Event.Add(OnValueChanged);
+                }
+
                 Listeners.Invoke(Variable.Value);
             }
         }
 
         private void OnDisable()
         {
-            if (Event != null)
-                Event.Remove(OnValueChanged);
+            if (Variable != null)
+            {
+                if (Variable.Event != null)
+                {
+                    Variable.Event.Remove(OnValueChanged);
+                }
+            }
         }
 
         private void OnValueChanged(T value)

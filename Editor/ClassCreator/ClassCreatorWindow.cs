@@ -7,14 +7,16 @@ using UnityEngine.UIElements;
 using System.Text.RegularExpressions;
 using System.IO;
 using DeTach.EditorDT.UIElements;
+using System.Linq;
 
 namespace DeTach.EditorDT
 {
     public class ClassCreatorWindow : EditorWindow
     {
         const string TEMPLATES_SEARCH_FILTER = "glob:\"Packages/com.gaton.de-tach/Editor/Templates/*.txt\"";
+        const string ICONS_SEARCH_FILTER = "glob:\"Packages/com.gaton.de-tach/Icons/Event_*.png\"";
 
-        const string DEFAULT_PATH = "Assets/PluginsDetach/CustomClasses/";
+        const string DEFAULT_PATH = "Assets/Plugins/DeTach/CustomClasses/";
 
 
         [MenuItem("DeTach/Class Creator")]
@@ -49,6 +51,10 @@ namespace DeTach.EditorDT
             /* --- CUSTOM NAME --- */
             var customName = new TextField("Custom Name");
             root.Add(customName);
+
+            /* --- ICON COLOR --- */
+            var colorDropdown = new DropdownField("Icon Color", LoadIconColorOptions(), 0);
+            root.Add(colorDropdown);
 
             /* --- NAMESPACES --- */
             VisualElement namespacesRoot = new VisualElement()
@@ -116,7 +122,7 @@ namespace DeTach.EditorDT
             createButton.clickable.clicked += () =>
             {
                 string namespaceInput = addNamespaces.value ? namespacesField.value : "";
-                CreateAllClasses(typeName.text, customName.text, pathField.value, namespaceInput);
+                CreateAllClasses(typeName.text, customName.text, pathField.value, namespaceInput, colorDropdown.value);
             };
 
             root.Add(createButton);
@@ -157,7 +163,7 @@ namespace DeTach.EditorDT
             return header;
         }
 
-        public void CreateAllClasses(string typeInput, string customNameInput, string savePath, string namespaceInput)
+        public void CreateAllClasses(string typeInput, string customNameInput, string savePath, string namespaceInput, string iconColor)
         {
             string[] templateGuids = AssetDatabase.FindAssets(TEMPLATES_SEARCH_FILTER);
 
@@ -185,7 +191,7 @@ namespace DeTach.EditorDT
 
             for (int i = 0; i < types.Length; i++)
             {
-                ClassInfo infos = new ClassInfo(types[i], customNames[i], namespaces);
+                ClassInfo infos = new ClassInfo(types[i], customNames[i], namespaces, iconColor);
                 ClassCreator.CreateClass(infos, pathAndTemplateContent, savePath);
             }
         }
@@ -235,6 +241,19 @@ namespace DeTach.EditorDT
         string PadString(string text, int padAmount)
         {
             return text.PadRight(Mathf.Max(0, padAmount - text.Length));
+        }
+
+        public List<string> LoadIconColorOptions()
+        {
+            var iconsGuids = AssetDatabase.FindAssets(ICONS_SEARCH_FILTER);
+
+            var iconsNames = new List<string>();
+
+            return iconsGuids.Select(guid => {
+                string filePath = AssetDatabase.GUIDToAssetPath(guid);
+                string colorName = Path.GetFileNameWithoutExtension(filePath).Split('_')[1];
+                return colorName;
+            }).ToList();
         }
     }
 }

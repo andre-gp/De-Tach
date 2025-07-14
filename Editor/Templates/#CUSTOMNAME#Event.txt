@@ -2,6 +2,7 @@ using UnityEngine;
 
 namespace DeTach
 {
+	[Icon("Packages/com.gaton.de-tach/Icons/Event_#COLOR#.png")]
 	[CreateAssetMenu(fileName = "#CUSTOMNAME#Event", menuName = "DeTach/#CUSTOMNAME#/#CUSTOMNAME#Event")]
 	public class #CUSTOMNAME#Event : GenericEvent<#TYPE#> { }
 }

@@ -23,9 +23,9 @@ namespace DeTach.EditorDT
 
                 var newFileName = Path.GetFileName(path);
                 newFileName = newFileName.Replace(".txt", ".cs").Replace("#CUSTOMNAME#", classInfo.customName);
-                newFileName = TemplateParser.Parse(newFileName, classInfo.typeName, classInfo.customName);
+                newFileName = TemplateParser.Parse(newFileName, classInfo);
 
-                var fileContents = TemplateParser.Parse(templateContent, classInfo.typeName, classInfo.customName);
+                var fileContents = TemplateParser.Parse(templateContent, classInfo);
                 fileContents = AddNamespaces(fileContents, classInfo.namespaces);
 
                 bool isEditor = newFileName.Contains("Editor_");
@@ -60,12 +60,14 @@ namespace DeTach.EditorDT
         public string typeName;
         public string customName;
         public string[] namespaces;
+        public string iconColor;
 
-        public ClassInfo(string typeName, string customName, string[] namespaces)
+        public ClassInfo(string typeName, string customName, string[] namespaces, string iconColor)
         {
             this.typeName = typeName;
             this.customName = customName;
             this.namespaces = namespaces;
+            this.iconColor = iconColor;
         }
     }
 }

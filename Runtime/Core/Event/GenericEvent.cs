@@ -47,7 +47,7 @@ namespace DeTach
 #endif
         }
 
-        public void UnregisterAll()
+        private void UnregisterAll()
         {
             OnChange = null;
 

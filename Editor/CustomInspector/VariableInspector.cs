@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -16,6 +17,7 @@ namespace DeTach.EditorDT
         CompletePropertyField<UnityEngine.Object> eventField;
         CompletePropertyField<T> initialVal;
         CompletePropertyField<T> currentVal;
+        Button saveButton;
 
         PlayModeInfos playModeInfos;
 
@@ -42,6 +44,8 @@ namespace DeTach.EditorDT
 
                 currentVal.PropertyField.enabledSelf = isInPlayMode;
                 currentVal.PropertyField.style.display = isInPlayMode ? DisplayStyle.Flex : DisplayStyle.None;
+
+                RefreshSaveButtonState();
             }
         }
 
@@ -52,13 +56,13 @@ namespace DeTach.EditorDT
 
             TVariable variable = target as TVariable;
 
-            /* --- Scriptable Obj --- */
+            /* --- SCRIPTABLE OBJ --- */
             ObjectField scriptableField = new ObjectField();
             scriptableField.value = variable;
             scriptableField.enabledSelf = false;
             root.Add(scriptableField);
 
-            /* --- Callback --- */
+            /* --- CALLBACK --- */
             VisualElement callbackRoot = new VisualElement()
             {
                 style =
@@ -73,7 +77,8 @@ namespace DeTach.EditorDT
 
             createEventButton.clickable.clicked += () =>
             {
-                eventField.BaseField.value = CreateEvent();
+                if(eventField != null && eventField.BaseField != null)
+                    eventField.BaseField.value = CreateEvent();
             };
 
             var eventPropField = new PropertyField(serializedObject.FindProperty("OnChangeValue"));
@@ -91,17 +96,38 @@ namespace DeTach.EditorDT
             var initialValuePropField = new PropertyField(serializedObject.FindProperty("initialValue"));
             initialVal = new CompletePropertyField<T>(initialValuePropField, value =>
             {
-                if (currentVal != null && currentVal.BaseField != null)
+                // Copy the initial value to the current value when not playing.
+                if (!EditorApplication.isPlaying && currentVal != null && currentVal.BaseField != null)
                     currentVal.BaseField.value = value;
+
+                RefreshSaveButtonState();
             });
             root.Add(initialValuePropField);
 
-            /* --- Current Value --- */
+            /* --- CURRENT VALUE --- */
             var currentValue = new PropertyField(serializedObject.FindProperty("value"));
-            currentVal = new CompletePropertyField<T>(currentValue);
+            currentVal = new CompletePropertyField<T>(currentValue, value =>
+            {
+                if (EditorApplication.isPlaying)
+                {
+                    variable.InvokeValueChange();
+                }
+
+                RefreshSaveButtonState();
+            });
             root.Add(currentValue);
 
-            /* --- Documentation --- */
+            /* --- SAVE BUTTON --- */
+            saveButton = new Button(() => { initialVal.BaseField.value = currentVal.BaseField.value; })
+            {
+                text = "Save Value"
+            };
+            saveButton.style.maxWidth = 200;
+            saveButton.style.alignSelf = Align.Center;
+            saveButton.style.marginTop = 10;
+            root.Add(saveButton);
+
+            /* --- DOCUMENTATION --- */
             var foldout = new Foldout() { text = "Documentation" };
             foldout.style.marginTop = 20;
             foldout.style.marginLeft = 10;
@@ -124,7 +150,7 @@ namespace DeTach.EditorDT
         {
             var path = Path.GetDirectoryName(AssetDatabase.GetAssetPath(target));
 
-            string eventName = $"On{target.name}Changed";
+            string eventName = $"{target.name}_Event";
             var newEvent = ScriptableObject.CreateInstance<TEvent>();
             newEvent.name = eventName;
 
@@ -142,7 +168,18 @@ namespace DeTach.EditorDT
             root.Add(scriptField);
         }
 
+        private void RefreshSaveButtonState()
+        {
+            if (saveButton == null)
+                return;
 
+            saveButton.style.display = EditorApplication.isPlaying ? DisplayStyle.Flex : DisplayStyle.None;
+
+            if(initialVal != null && initialVal.BaseField != null && currentVal != null && currentVal.BaseField != null)
+            {
+                saveButton.enabledSelf = !initialVal.BaseField.value.Equals(currentVal.BaseField.value);
+            }
+        }
     }
 
     /// <summary>
@@ -161,19 +198,29 @@ namespace DeTach.EditorDT
 
             PropertyField.RegisterCallback<AttachToPanelEvent>(evt =>
             {
-                BaseField = field.Q<BaseField<T>>();
-
-                if (BaseField == null)
-                    return;
-
-                OnChangeBaseFieldValue?.Invoke(BaseField.value);
-
-                BaseField.RegisterValueChangedCallback(evt =>
-                {
-                    OnChangeBaseFieldValue?.Invoke(evt.newValue);
-                });
+                WaitToQuery(OnChangeBaseFieldValue);
             });
 
+        }
+
+        async void WaitToQuery(Action<T> OnChangeBaseFieldValue = null)
+        {
+            // Wait one frame till the panel is properly attached.
+            await Task.Delay(1);
+
+            BaseField = PropertyField.Q<BaseField<T>>();
+
+            if (BaseField == null)
+            {
+                return;
+            }
+
+            OnChangeBaseFieldValue?.Invoke(BaseField.value);
+
+            BaseField.RegisterValueChangedCallback(evt =>
+            {
+                OnChangeBaseFieldValue?.Invoke(evt.newValue);
+            });
         }
     }
 }
