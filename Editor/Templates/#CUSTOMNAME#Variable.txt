@@ -1,0 +1,7 @@
+using UnityEngine;
+
+namespace DeTach
+{
+    [CreateAssetMenu(fileName = "#CUSTOMNAME#Variable", menuName = "DeTach/#CUSTOMNAME#/#CUSTOMNAME#Variable")]
+    public class #CUSTOMNAME#Variable : GenericVariable<#TYPE#, #CUSTOMNAME#Event> { }
+}

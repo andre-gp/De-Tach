@@ -1,0 +1,10 @@
+using UnityEngine;
+using UnityEngine.Events;
+
+namespace DeTach
+{
+	public class #CUSTOMNAME#EventListener : GenericEventListener<#TYPE#, #CUSTOMNAME#Event, #CUSTOMNAME#Variable, #CUSTOMNAME#UnityEvent> { }
+
+	[System.Serializable]
+	public class #CUSTOMNAME#UnityEvent : UnityEvent<#TYPE#> { }
+}

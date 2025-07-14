@@ -1,0 +1,17 @@
+{
+    "name": "custom-classes",
+    "rootNamespace": "",
+    "references": [
+        "GUID:f8dc4b33ec8b394489ed36bad5a8cc4f",
+        "GUID:da45ac3ddde3077458d691f5f01a83ca"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

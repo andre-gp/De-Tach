@@ -1,0 +1,8 @@
+using UnityEditor;
+using UnityEngine;
+
+namespace DeTach.EditorDT
+{
+	[CustomEditor(typeof(#CUSTOMNAME#Variable))]
+	public class #CUSTOMNAME#VariableInspector : VariableInspector<#CUSTOMNAME#Variable, #TYPE#, #CUSTOMNAME#Event> {}
+}

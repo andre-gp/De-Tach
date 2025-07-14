@@ -1,0 +1,37 @@
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+
+namespace DeTach
+{
+    [Icon("Packages/com.gaton.de-tach/Icons/Event.png")]
+    public class BaseEvent : ScriptableObject
+    {
+        public string eventName;
+
+        /// <summary>
+        /// Subscribe to this event when you don't care about the value raised.
+        /// </summary>
+        protected event Action OnChangeBaseEvent;
+
+#if UNITY_EDITOR
+        [SerializeField] List<UnityEngine.Object> listeners;
+
+        public List<UnityEngine.Object> Listeners
+        {
+            get
+            {
+                if (listeners == null)
+                    listeners = new List<UnityEngine.Object>();
+
+                return listeners;
+            }
+        }
+
+#endif
+        protected void Invoke()
+        {
+            OnChangeBaseEvent?.Invoke();
+        }
+    }
+}
