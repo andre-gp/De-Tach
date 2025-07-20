@@ -73,6 +73,7 @@ namespace DeTach.EditorDT
 
             root.Add(callbackRoot);
 
+            /* --- CREATE EVENT --- */
             var createEventButton = new Button() { text = "+" };
 
             createEventButton.clickable.clicked += () =>
@@ -81,16 +82,36 @@ namespace DeTach.EditorDT
                     eventField.BaseField.value = CreateEvent();
             };
 
+            /* --- DELETE EVENT --- */
+
+            var deleteEventButton = new Button() { text = "-" };
+
+            deleteEventButton.clickable.clicked += () =>
+            {
+                if (eventField != null && eventField.BaseField != null)
+                {
+                    AssetDatabase.RemoveObjectFromAsset(eventField.BaseField.value);
+                    Undo.DestroyObjectImmediate(eventField.BaseField.value);
+                    AssetDatabase.SaveAssets();
+
+                    eventField.BaseField.value = null;
+
+                    //AssetDatabase.getsub(eventField.BaseField.value);
+                }
+            };
+
             var eventPropField = new PropertyField(serializedObject.FindProperty("OnChangeValue"));
             eventPropField.style.minWidth = 300;
             eventField = new CompletePropertyField<UnityEngine.Object>(eventPropField, evt =>
             {
                 createEventButton.style.display = evt == null ? DisplayStyle.Flex : DisplayStyle.None;
+                deleteEventButton.style.display = evt == null ? DisplayStyle.None : DisplayStyle.Flex;
             });
             callbackRoot.Add(eventPropField);
 
 
             callbackRoot.Add(createEventButton);
+            callbackRoot.Add(deleteEventButton);
 
             /* --- Initial Value --- */
             var initialValuePropField = new PropertyField(serializedObject.FindProperty("initialValue"));
@@ -148,14 +169,18 @@ namespace DeTach.EditorDT
 
         private TEvent CreateEvent()
         {
-            var path = Path.GetDirectoryName(AssetDatabase.GetAssetPath(target));
+            var assetPath = AssetDatabase.GetAssetPath(target);
+            var directoryPath = Path.GetDirectoryName(assetPath);
 
-            string eventName = $"{target.name}_Event";
+            string eventName = $"VarEvent_{target.name}";
             var newEvent = ScriptableObject.CreateInstance<TEvent>();
             newEvent.name = eventName;
 
-            AssetDatabase.CreateAsset(newEvent, Path.Combine(path, eventName + ".asset"));
+            //AssetDatabase.CreateAsset(newEvent, Path.Combine(path, eventName + ".asset"));
+            AssetDatabase.AddObjectToAsset(newEvent, assetPath);
             EditorGUIUtility.PingObject(newEvent);
+
+            AssetDatabase.SaveAssets();
 
             return newEvent;
         }
