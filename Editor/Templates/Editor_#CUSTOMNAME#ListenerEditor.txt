@@ -1,0 +1,8 @@
+using UnityEditor;
+using UnityEngine;
+
+namespace DeTach.EditorDT 
+{
+    [CustomEditor(typeof(#CUSTOMNAME#Listener))]
+    public class #CUSTOMNAME#ListenerEditor : ListenerInspector<#TYPE#, #CUSTOMNAME#Event, #CUSTOMNAME#Variable, #CUSTOMNAME#UnityEvent, #CUSTOMNAME#Listener> { } 
+}

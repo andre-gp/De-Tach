@@ -5,7 +5,7 @@ using UnityEngine;
 namespace DeTach
 {
     [Icon("Packages/com.gaton.de-tach/Icons/Event_White.png")]
-    public class BaseEvent : ScriptableObject
+    public class BaseEvent : DeTachObject
     {
         public string eventName;
 

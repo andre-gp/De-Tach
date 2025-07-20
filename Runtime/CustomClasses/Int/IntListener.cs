@@ -3,7 +3,9 @@ using UnityEngine.Events;
 
 namespace DeTach
 {
-	public class IntEventListener : GenericEventListener<int, IntEvent, IntVariable, IntUnityEvent> { }
+	[Icon("Packages/com.gaton.de-tach/Icons/Listener_Blue.png")]
+	[AddComponentMenu("DeTach/Listeners/IntListener")]
+	public class IntListener : GenericListener<int, IntEvent, IntVariable, IntUnityEvent> { }
 
 	[System.Serializable]
 	public class IntUnityEvent : UnityEvent<int> { }

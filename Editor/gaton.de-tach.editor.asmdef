@@ -1,6 +1,6 @@
 {
     "name": "com.gaton.de-tach",
-    "rootNamespace": "DeTach.Editor",
+    "rootNamespace": "DeTach.EditorDT",
     "references": [
         "GUID:f8dc4b33ec8b394489ed36bad5a8cc4f"
     ],
