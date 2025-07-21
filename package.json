@@ -4,9 +4,9 @@
   "displayName": "De-Tach",
   "description": "De-Tach is a toolkit that helps you decouple your game logic by using ScriptableObject-based variables, events, and utilities. \nSimplify communication between systems while keeping your Unity projects clean and modular.",
   "unity": "2019.1",
-  "changelogUrl": "https://github.com/andre-gp/DeTach/blob/main/CHANGELOG.md",
+  "changelogUrl": "https://github.com/andre-gp/De-Tach/blob/main/CHANGELOG.md",
   "license": "MIT",
-  "licensesUrl": "https://github.com/andre-gp/DeTach/blob/main/LICENSE.md",
+  "licensesUrl": "https://github.com/andre-gp/De-Tach/blob/main/LICENSE.md",
   "keywords": [
     "detach",
     "decouple",
