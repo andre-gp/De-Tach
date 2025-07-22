@@ -56,6 +56,11 @@ namespace DeTach.EditorDT
             var colorDropdown = new DropdownField("Icon Color", LoadIconColorOptions(), 0);
             root.Add(colorDropdown);
 
+            /* --- MENU NAME --- */
+            var menuName = new TextField("Menu Name") { value = Application.productName };
+            menuName.tooltip = "The Menu Name in which your classes will be acessible";
+            root.Add(menuName);
+
             /* --- NAMESPACES --- */
             VisualElement namespacesRoot = new VisualElement()
             {
@@ -99,6 +104,8 @@ namespace DeTach.EditorDT
 
                 if (input.Length >= 1)
                 {
+                    input = RemoveWhiteSpaces(input);
+
                     input = char.ToUpper(input[0]) + input.Substring(1);
 
                     // Convert every character followed by a ';' or ',' to be uppercase.
@@ -122,7 +129,7 @@ namespace DeTach.EditorDT
             createButton.clickable.clicked += () =>
             {
                 string namespaceInput = addNamespaces.value ? namespacesField.value : "";
-                CreateAllClasses(typeName.text, customName.text, pathField.value, namespaceInput, colorDropdown.value);
+                CreateAllClasses(typeName.text, customName.text, pathField.value, namespaceInput, colorDropdown.value, menuName.text);
             };
 
             root.Add(createButton);
@@ -163,9 +170,11 @@ namespace DeTach.EditorDT
             return header;
         }
 
-        public void CreateAllClasses(string typeInput, string customNameInput, string savePath, string namespaceInput, string iconColor)
+        public void CreateAllClasses(string typeInput, string customNameInput, string savePath, string namespaceInput, string iconColor, string menuName)
         {
             string[] templateGuids = AssetDatabase.FindAssets(TEMPLATES_SEARCH_FILTER);
+
+            typeInput = RemoveWhiteSpaces(typeInput);
 
             string[] types = ExtractInputs(typeInput);
             string[] customNames = ExtractInputs(customNameInput);
@@ -191,17 +200,20 @@ namespace DeTach.EditorDT
 
             for (int i = 0; i < types.Length; i++)
             {
-                ClassInfo infos = new ClassInfo(types[i], customNames[i], namespaces, iconColor);
+                ClassInfo infos = new ClassInfo(types[i], customNames[i], namespaces, iconColor, menuName);
                 ClassCreator.CreateClass(infos, pathAndTemplateContent, savePath);
             }
         }
 
-
-
-
+        private static string RemoveWhiteSpaces(string typeInput)
+        {
+            return typeInput.Replace(" ", string.Empty);
+        }
 
         void UpdatePreview(Label label, string input)
         {
+            input = RemoveWhiteSpaces(input);
+
             string[] types = ExtractInputs(input);
 
             StringBuilder previewBuilder = new StringBuilder();

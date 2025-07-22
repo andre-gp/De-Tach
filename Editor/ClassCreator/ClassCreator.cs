@@ -61,13 +61,15 @@ namespace DeTach.EditorDT
         public string customName;
         public string[] namespaces;
         public string iconColor;
+        public string menuName;
 
-        public ClassInfo(string typeName, string customName, string[] namespaces, string iconColor)
+        public ClassInfo(string typeName, string customName, string[] namespaces, string iconColor, string menuName)
         {
             this.typeName = typeName;
             this.customName = customName;
             this.namespaces = namespaces;
             this.iconColor = iconColor;
+            this.menuName = menuName;
         }
     }
 }

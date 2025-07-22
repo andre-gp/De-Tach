@@ -3,6 +3,6 @@ using UnityEngine;
 namespace DeTach
 {
     [Icon("Packages/com.gaton.de-tach/Icons/Variable_#COLOR#.png")]
-    [CreateAssetMenu(fileName = "#CUSTOMNAME#Variable", menuName = "DeTach/#CUSTOMNAME#/#CUSTOMNAME#Variable", order = -1)]
+    [CreateAssetMenu(fileName = "#CUSTOMNAME#Variable", menuName = "DeTach/#MENUNAME#/#CUSTOMNAME#/#CUSTOMNAME#Variable", order = -1)]
     public class #CUSTOMNAME#Variable : GenericVariable<#TYPE#, #CUSTOMNAME#Event> { }
 }
