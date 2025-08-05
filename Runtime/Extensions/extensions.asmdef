@@ -1,11 +1,13 @@
 {
-    "name": "extensions",
+    "name": "gaton.de-tach.extensions",
     "rootNamespace": "",
     "references": [
         "GUID:f8dc4b33ec8b394489ed36bad5a8cc4f",
-        "GUID:166067685f4c01d4da8e4f24fde17190"
+        "GUID:2c7f66a567de83f48a4403eda3fdcdb1"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

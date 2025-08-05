@@ -1,2 +1,14 @@
 fileFormatVersion: 2
 guid: 1e9e1b245c228454f8bcb1324a284372
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - m_ViewDataDictionary: {instanceID: 0}
+  - customClassesAssembly: {fileID: 5897886265953266890, guid: 2c7f66a567de83f48a4403eda3fdcdb1, type: 3}
+  - customClassesEditorAssembly: {fileID: 5897886265953266890, guid: 97544d6a66d91d144896616e0fc93c7d, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -8,12 +8,15 @@ using System.Text.RegularExpressions;
 using System.IO;
 using DeTach.EditorDT.UIElements;
 using System.Linq;
+using UnityEditorInternal;
 
 namespace DeTach.EditorDT
 {
     public class ClassCreatorWindow : EditorWindow
     {
-        const string TEMPLATES_SEARCH_FILTER = "glob:\"Packages/com.gaton.de-tach/Editor/Templates/*.txt\"";
+        const string TEMPLATES_FOLDER = "Packages/com.gaton.de-tach/Editor/Templates/";
+        const string TEMPLATES_SEARCH_FILTER = "glob:\"" + TEMPLATES_FOLDER + "**\"";
+
         const string ICONS_SEARCH_FILTER = "glob:\"Packages/com.gaton.de-tach/Icons/Event_*.png\"";
 
         const string DEFAULT_PATH = "Assets/Plugins/DeTach/CustomClasses/";
@@ -192,10 +195,20 @@ namespace DeTach.EditorDT
 
             foreach (var guid in templateGuids)
             {
-                string path = AssetDatabase.GUIDToAssetPath(guid);
-                string template = File.ReadAllText(path);
+                string fullPath = AssetDatabase.GUIDToAssetPath(guid);
 
-                pathAndTemplateContent.Add(new Tuple<string, string>(path, template));
+                FileAttributes attributes = File.GetAttributes(fullPath);
+
+                if (attributes.HasFlag(FileAttributes.Directory))
+                {
+                    continue;
+                }
+
+                string relativePath = fullPath.Replace(TEMPLATES_FOLDER, "");
+
+                string template = File.ReadAllText(fullPath);
+
+                pathAndTemplateContent.Add(new Tuple<string, string>(relativePath, template));
             }
 
             for (int i = 0; i < types.Length; i++)
@@ -266,6 +279,11 @@ namespace DeTach.EditorDT
                 string colorName = Path.GetFileNameWithoutExtension(filePath).Split('_')[1];
                 return colorName;
             }).ToList();
+        }
+
+        private string GetAssetGUID(UnityEngine.Object obj)
+        {
+            return AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(obj));
         }
     }
 }

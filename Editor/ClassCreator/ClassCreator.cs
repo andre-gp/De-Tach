@@ -10,32 +10,30 @@ namespace DeTach.EditorDT
     {
         public static void CreateClass(ClassInfo classInfo, List<Tuple<string, string>> pathAndTemplateContent, string savePath)
         {
-            var runtimeFolder = Path.Combine(savePath, classInfo.customName);
+            var mainFolder = Path.Combine(savePath, classInfo.customName);
+
+            var runtimeFolder = Path.Combine(mainFolder, "Runtime/");
             Directory.CreateDirectory(runtimeFolder);
 
-            var editorFolder = Path.Combine(runtimeFolder, "Editor/");
+            var editorFolder = Path.Combine(mainFolder, "Editor/");
             Directory.CreateDirectory(editorFolder);
 
             foreach (var template in pathAndTemplateContent)
             {
-                string path = template.Item1;
+                string relativePath = template.Item1;
                 string templateContent = template.Item2;
 
-                var newFileName = Path.GetFileName(path);
-                newFileName = newFileName.Replace(".txt", ".cs").Replace("#CUSTOMNAME#", classInfo.customName);
-                newFileName = TemplateParser.Parse(newFileName, classInfo);
+                var parsedRelativePath = relativePath.Replace(".txt", ".cs").Replace("#CUSTOMNAME#", classInfo.customName);
+                parsedRelativePath = TemplateParser.Parse(parsedRelativePath, classInfo);
 
                 var fileContents = TemplateParser.Parse(templateContent, classInfo);
-                fileContents = AddNamespaces(fileContents, classInfo.namespaces);
 
-                bool isEditor = newFileName.Contains("Editor_");
+                if (parsedRelativePath.EndsWith(".cs"))
+                {
+                    fileContents = AddNamespaces(fileContents, classInfo.namespaces);
+                }
 
-                newFileName = newFileName.Replace("Editor_", "");
-
-                string folderPath = isEditor ? editorFolder : runtimeFolder;
-
-                File.WriteAllText(Path.Combine(folderPath, newFileName), fileContents);
-
+                File.WriteAllText(Path.Combine(mainFolder, parsedRelativePath), fileContents);
             }
 
             Debug.Log($"Succesfully created extensions for the type {classInfo.typeName}");

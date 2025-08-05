@@ -1,7 +1,9 @@
 {
-    "name": "com.gaton.de-tach",
-    "rootNamespace": "DeTach.EditorDT",
+    "name": "gaton.de-tach.custom-classes.editor",
+    "rootNamespace": "",
     "references": [
+        "GUID:2c7f66a567de83f48a4403eda3fdcdb1",
+        "GUID:da45ac3ddde3077458d691f5f01a83ca",
         "GUID:f8dc4b33ec8b394489ed36bad5a8cc4f"
     ],
     "includePlatforms": [

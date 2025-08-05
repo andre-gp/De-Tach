@@ -19,10 +19,10 @@ namespace DeTach
 
         private void OnDisable()
         {
-            
+
         }
 
-        
+
 
     }
 }
