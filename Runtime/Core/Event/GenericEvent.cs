@@ -7,7 +7,7 @@ namespace DeTach
 {
     public abstract class GenericEvent<T> : BaseEvent
     {
-        protected event Action<T> OnChange;
+        protected event Action<T> onChange;
 
         [SerializeField] protected T lastValue;
 
@@ -19,37 +19,39 @@ namespace DeTach
         {
             base.Invoke();
 
-            OnChange?.Invoke(value);
+            onChange?.Invoke(value);
 
             lastValue = value;
         }
 
-        public void Add(Action<T> action)
+        public event Action<T> OnChange
         {
-            if (lastValue != null)
+            add
             {
-                action.Invoke(lastValue);
+                if (lastValue != null)
+                {
+                    value.Invoke(lastValue);
+                }
+
+                onChange += value;
+
+#if UNITY_EDITOR
+                Listeners.Add(value.Target as UnityEngine.Object);
+#endif
             }
-
-            OnChange += action;
-
-#if UNITY_EDITOR
-            Listeners.Add(action.Target as UnityEngine.Object);
-#endif
-        }
-
-        public void Remove(Action<T> action)
-        {
-            OnChange -= action;
+            remove
+            {
+                onChange -= value;
 
 #if UNITY_EDITOR
-            Listeners.Remove(action.Target as UnityEngine.Object);
+                Listeners.Remove(value.Target as UnityEngine.Object);
 #endif
+            }
         }
 
         private void UnregisterAll()
         {
-            OnChange = null;
+            onChange = null;
 
 #if UNITY_EDITOR
             Listeners.Clear();

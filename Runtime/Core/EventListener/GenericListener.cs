@@ -20,7 +20,7 @@ namespace DeTach
 
             if(deTachEvent != null)
             {
-                deTachEvent.Add(OnValueChanged);
+                deTachEvent.OnChange += OnValueChanged;
             }
 
             if(deTachObject is TVariable variable)
@@ -35,7 +35,7 @@ namespace DeTach
 
             if (deTachEvent != null)
             {
-                deTachEvent.Remove(OnValueChanged);
+                deTachEvent.OnChange -= OnValueChanged;
             }
         }
 
