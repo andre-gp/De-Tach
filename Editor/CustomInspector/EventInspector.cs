@@ -61,9 +61,11 @@ namespace DeTach.EditorDT
 
             Button raiseBtn = new Button(() =>
             {
+                T editorInvokeValue = (T)serializedObject.FindProperty("invokeVal").boxedValue;
+
                 // Unity doesn't expose access to a .value in the 'PropertyField'
                 // It is a wrapper around a BaseField of value T
-                var editorInvokeValue = temporaryValue.Q<BaseField<T>>().value;
+                //var editorInvokeValue = temporaryValue.Q<BaseField<T>>().value;
 
                 baseEvent.Invoke(editorInvokeValue);
 
