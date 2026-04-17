@@ -9,8 +9,6 @@ namespace DeTach
     {
         protected event Action<T> onChange;
 
-        [SerializeField] protected T lastValue;
-
 #if UNITY_EDITOR
         [SerializeField] T invokeVal;
 #endif
@@ -20,18 +18,12 @@ namespace DeTach
             base.Invoke();
 
             onChange?.Invoke(value);
-
-            lastValue = value;
         }
 
         public event Action<T> OnChange
         {
             add
             {
-                if (lastValue != null)
-                {
-                    value.Invoke(lastValue);
-                }
 
                 onChange += value;
 
@@ -75,7 +67,6 @@ namespace DeTach
             if (change == PlayModeStateChange.ExitingEditMode ||
                change == PlayModeStateChange.EnteredEditMode)
             {
-                lastValue = default;
                 UnregisterAll();
             }
         }
