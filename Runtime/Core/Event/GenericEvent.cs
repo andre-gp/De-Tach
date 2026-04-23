@@ -11,6 +11,8 @@ namespace DeTach
 
         [SerializeField] string documentation;
 
+        [SerializeField] bool printInvokeCalls;
+
 #if UNITY_EDITOR
         [SerializeField] T invokeVal;
 #endif
@@ -18,6 +20,11 @@ namespace DeTach
         public void Invoke(T value)
         {
             base.Invoke();
+
+            if (printInvokeCalls)
+            {
+                Debug.Log($"[{this}] Invoking value: {value}\n{new System.Diagnostics.StackTrace(true)}");
+            }
 
             onChange?.Invoke(value);
         }

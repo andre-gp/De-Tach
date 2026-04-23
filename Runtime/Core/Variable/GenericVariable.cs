@@ -11,6 +11,8 @@ namespace DeTach
 
         [SerializeField] string documentation;
 
+        [SerializeField] bool printValueChanges;
+
         public T Value
         {
             get
@@ -19,6 +21,10 @@ namespace DeTach
             }
             set
             {
+                if (printValueChanges)
+                {
+                    Debug.Log($"[{this}] New value: {value}\n{new System.Diagnostics.StackTrace(true)}");
+                }
                 this.value = value;
                 this.OnChangeValue?.Invoke(value);
             }

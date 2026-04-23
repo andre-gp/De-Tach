@@ -11,6 +11,7 @@ namespace DeTach.EditorDT
     public class EventInspector<T, TEvent> : Editor where TEvent : GenericEvent<T>
     {
         const string DOCUMENTATION_PROPERTY = "documentation";
+        const string PRINT_INVOKE_CALLS = "printInvokeCalls";
 
         Foldout foldout;
 
@@ -116,6 +117,22 @@ namespace DeTach.EditorDT
 
             foldoutDocumentation.Add(textField);
             root.Add(foldoutDocumentation);
+
+            /* --- PRINT VALUE CHANGES --- */
+
+            var debugFoldout = new Foldout() { text = "Advanced" };
+            debugFoldout.style.marginTop = 20;
+            debugFoldout.style.marginLeft = 10;
+            debugFoldout.value = serializedObject.FindProperty(PRINT_INVOKE_CALLS).boolValue;
+            var printInvokeCallsToggle = new Toggle("Print invoke calls");
+            printInvokeCallsToggle.tooltip = "When this value is true, all invoke calls will be printed to the console.\nThis should only be used as a debug tool.";
+            printInvokeCallsToggle.RegisterValueChangedCallback((changeEvent) =>
+            {
+                printInvokeCallsToggle.style.backgroundColor = changeEvent.newValue ? Color.softRed : StyleKeyword.None;
+            });
+            debugFoldout.Add(printInvokeCallsToggle);
+            printInvokeCallsToggle.bindingPath = PRINT_INVOKE_CALLS;
+            root.Add(debugFoldout);
 
             return root;
         }
