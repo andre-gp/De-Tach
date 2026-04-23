@@ -61,7 +61,12 @@ namespace DeTach
             if (change == PlayModeStateChange.ExitingEditMode ||
                change == PlayModeStateChange.EnteredEditMode)
             {
-                value = initialValue;
+                if ((value != null && !value.Equals(initialValue)) ||
+                    (value == null && initialValue != null))
+                {
+                    value = initialValue;
+                    EditorUtility.SetDirty(this);
+                }
             }
         }
 #endif
