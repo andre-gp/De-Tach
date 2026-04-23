@@ -9,6 +9,8 @@ namespace DeTach
     {
         protected event Action<T> onChange;
 
+        [SerializeField] string documentation;
+
 #if UNITY_EDITOR
         [SerializeField] T invokeVal;
 #endif

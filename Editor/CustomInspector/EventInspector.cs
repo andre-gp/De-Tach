@@ -10,6 +10,8 @@ namespace DeTach.EditorDT
     [CustomEditor(typeof(BaseEvent))]
     public class EventInspector<T, TEvent> : Editor where TEvent : GenericEvent<T>
     {
+        const string DOCUMENTATION_PROPERTY = "documentation";
+
         Foldout foldout;
 
         PlayModeInfos playModeInfos;
@@ -102,6 +104,18 @@ namespace DeTach.EditorDT
             root.Add(foldout);
 
             playModeInfos.RefreshPlayModeState(true);
+
+            /* --- DOCUMENTATION --- */
+            var foldoutDocumentation = new Foldout() { text = "Documentation" };
+            foldoutDocumentation.style.marginTop = 20;
+            foldoutDocumentation.style.marginLeft = 10;
+            foldoutDocumentation.value = !string.IsNullOrWhiteSpace(serializedObject.FindProperty(DOCUMENTATION_PROPERTY).stringValue);
+
+            var textField = new TextField() { multiline = true };
+            textField.bindingPath = DOCUMENTATION_PROPERTY;
+
+            foldoutDocumentation.Add(textField);
+            root.Add(foldoutDocumentation);
 
             return root;
         }
