@@ -1,3 +1,4 @@
+using System;
 using Unity.Properties;
 using UnityEditor;
 using UnityEditor.UIElements;
@@ -41,8 +42,23 @@ namespace DeTach.EditorDT
                 dataSourcePath = new PropertyPath(nameof(listener.deTachObject)),
                 bindingMode = BindingMode.TwoWay
             });
-            
 
+            /* --- WARNING TEXT --- */
+
+            var warningTextNoEvent = new Label("WARNING: No event detected for this variable.") { style =
+                {
+                    color = Color.red,
+                    paddingLeft = 5,
+                    paddingBottom = 10,
+                    display = DisplayStyle.None
+                }
+            };
+
+            detachObjectField.RegisterValueChangedCallback(evt => 
+            {
+                bool shouldShow = evt.newValue is BaseVariable baseVariable && baseVariable.GetBaseEvent() == null;
+                warningTextNoEvent.style.display = shouldShow ? DisplayStyle.Flex : DisplayStyle.None;
+            });
 
 
             /* --- TYPE --- */
@@ -66,6 +82,8 @@ namespace DeTach.EditorDT
             detachObjectRoot.Add(typeField);
 
             detachObjectRoot.Add(detachObjectField);
+
+            root.Add(warningTextNoEvent);
 
             RefreshObjectFieldType(detachObjectField, (DeTachType)typeField.value);
 
