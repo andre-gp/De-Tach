@@ -14,6 +14,7 @@ namespace DeTach.EditorDT
     {
         const string DOCUMENTATION_PROPERTY = "documentation";
         const string PRINT_VALUE_CHANGES_PROPERTY = "printValueChanges";
+        const string UNLOAD_PROPERTY = "unloadUnusedAsset";
 
         CompletePropertyField<UnityEngine.Object> eventField;
         CompletePropertyField<T> initialVal;
@@ -175,6 +176,22 @@ namespace DeTach.EditorDT
             });
             debugFoldout.Add(printValueToggle);
             printValueToggle.bindingPath = PRINT_VALUE_CHANGES_PROPERTY;
+
+            /* --- UNLOAD UNUSED ASSET --- */
+            var unloadToggle = new Toggle("Unload Unused Asset");
+            unloadToggle.tooltip = "When on, this asset may be unloaded on scene loads, discarding its runtime value if no loaded scene references it.";
+            unloadToggle.bindingPath = UNLOAD_PROPERTY;
+
+            var unloadWarning = new HelpBox("Turning this on could lead to information loss between scene loads if the object is not referenced in a scene.", HelpBoxMessageType.Warning);
+
+            void RefreshUnloadWarning(bool unload) => unloadWarning.style.display = unload ? DisplayStyle.Flex : DisplayStyle.None;
+
+            unloadToggle.RegisterValueChangedCallback(evt => RefreshUnloadWarning(evt.newValue));
+            RefreshUnloadWarning(serializedObject.FindProperty(UNLOAD_PROPERTY).boolValue);
+
+            debugFoldout.Add(unloadToggle);
+            debugFoldout.Add(unloadWarning);
+
             root.Add(debugFoldout);
 
             OnChangeIsPlaying(playModeInfos.IsInPlayMode);

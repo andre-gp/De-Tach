@@ -1,4 +1,6 @@
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 
 namespace DeTach
@@ -44,12 +46,15 @@ namespace DeTach
 
         public TEvent Event { get { return OnChangeValue; } }
 
-#if UNITY_EDITOR
-        private void OnEnable()
+        protected override void OnEnable()
         {
+            base.OnEnable();
+#if UNITY_EDITOR
             EditorApplication.playModeStateChanged += OnChangePlayModeState;
+#endif
         }
 
+#if UNITY_EDITOR
         private void OnDisable()
         {
             EditorApplication.playModeStateChanged -= OnChangePlayModeState;
